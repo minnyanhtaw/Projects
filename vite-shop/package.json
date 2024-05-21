@@ -17,6 +17,6 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "flowbite": "^2.3.0",
-    "sweetalert2": "^11.10.5"
+    "sweetalert2": "^11.11.0"
   }
 }

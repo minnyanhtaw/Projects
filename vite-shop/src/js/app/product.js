@@ -1,4 +1,14 @@
-import { productGroup, productTemplate } from "../core/selectors.js";
+import { products } from "../core/data.js";
+import {
+  cartItemGroup,
+  productGroup,
+  productTemplate,
+} from "../core/selectors.js";
+import {
+  createCartItem,
+  updateCartItemCount,
+  updateCartTotal,
+} from "./cart.js";
 
 export const renderStars = (rate) => {
   let stars = "";
@@ -23,13 +33,16 @@ export const renderStars = (rate) => {
 
 export const createProduct = (product) => {
   const template = productTemplate.content.cloneNode(true);
+  template
+    .querySelector(".product-card")
+    .setAttribute("product-id", product.id);
   template.querySelector(".product-img").src = product.image;
   template.querySelector(".product-title").innerText = product.title;
   template.querySelector(".product-description").innerText =
     product.description;
   template.querySelector(
     ".product-rating"
-  ).innerText = `${product.rating.rate} / ${product.rating.count}`;
+  ).innerText = `(${product.rating.rate} / ${product.rating.count})`;
 
   template.querySelector(".product-stars").innerHTML = renderStars(
     product.rating.rate
@@ -42,4 +55,24 @@ export const createProduct = (product) => {
 export const renderProduct = (products) => {
   productGroup.innerHTML = "";
   products.forEach((product) => productGroup.append(createProduct(product)));
+};
+
+export const handlerProductGroup = (event) => {
+  if (event.target.classList.contains("product-add-cart-btn")) {
+    const currentProductCard = event.target.closest(".product-card");
+
+    const currentProductCardId = parseInt(
+      currentProductCard.getAttribute("product-id")
+    );
+
+    const currentProduct = products.find(
+      (product) => product.id === currentProductCardId
+    );
+
+    console.log(currentProduct);
+
+    cartItemGroup.append(createCartItem(currentProduct, 1));
+    updateCartTotal();
+    updateCartItemCount();
+  }
 };
