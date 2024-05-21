@@ -3,3 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cat-btn.active {
+    @apply bg-zinc-700 text-white
+}
