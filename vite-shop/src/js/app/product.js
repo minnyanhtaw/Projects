@@ -40,5 +40,6 @@ export const createProduct = (product) => {
 };
 
 export const renderProduct = (products) => {
+  productGroup.innerHTML = "";
   products.forEach((product) => productGroup.append(createProduct(product)));
 };
