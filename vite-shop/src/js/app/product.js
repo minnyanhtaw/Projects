@@ -1,6 +1,7 @@
 import { products } from "../core/data.js";
 import {
   cartItemGroup,
+  openDrawer,
   productGroup,
   productTemplate,
 } from "../core/selectors.js";
@@ -72,7 +73,7 @@ export const handlerProductGroup = (event) => {
   if (event.target.classList.contains("product-add-cart-btn")) {
     const currentBtn = event.target;
     currentBtn.setAttribute("disabled", true);
-    currentBtn.innerText = "Added"
+    currentBtn.innerText = "Added";
     const currentProductCard = event.target.closest(".product-card");
 
     const currentProductCardId = parseInt(
@@ -83,10 +84,53 @@ export const handlerProductGroup = (event) => {
       (product) => product.id === currentProductCardId
     );
 
-    console.log(currentProduct);
+    const currentProductImg = currentProductCard.querySelector(".product-img");
 
-    cartItemGroup.append(createCartItem(currentProduct, 1));
-    updateCartTotal();
-    updateCartItemCount();
+    const animateImg = new Image();
+    animateImg.src = currentProductImg.src;
+
+    animateImg.style.position = "fixed";
+    animateImg.style.top = currentProductImg.getBoundingClientRect().top + "px";
+    animateImg.style.left =
+      currentProductImg.getBoundingClientRect().left + "px";
+    animateImg.style.width =
+      currentProductImg.getBoundingClientRect().width + "px";
+    animateImg.style.height =
+      currentProductImg.getBoundingClientRect().height + "px";
+
+    document.querySelector("body").append(animateImg);
+    // console.log(currentProduct);
+
+    const keyframe = [
+      {
+        top: currentProductImg.getBoundingClientRect().top + "px",
+        left: currentProductImg.getBoundingClientRect().left + "px",
+      },
+      {
+        top: openDrawer.querySelector("svg").getBoundingClientRect().top + "px",
+        left:
+          openDrawer.querySelector("svg").getBoundingClientRect().left + "px",
+        height: "0px",
+        width: "0px",
+        transform: "rotate(2turn)",
+      },
+    ];
+
+    const duration = 500;
+    const addToCartAnimate = animateImg.animate(keyframe, duration);
+
+    const handlerAddToCartAnimate = () => {
+      animateImg.remove();
+      openDrawer.classList.add("animate__tada");
+      openDrawer.addEventListener("animationend", () => {
+        openDrawer.classList.remove("animate__tada");
+      });
+
+      cartItemGroup.append(createCartItem(currentProduct, 1));
+      updateCartTotal();
+      updateCartItemCount();
+    };
+
+    addToCartAnimate.addEventListener("finish", handlerAddToCartAnimate);
   }
 };

@@ -7,3 +7,4 @@ export const cartItemTemplate = document.querySelector("#cartItemTemplate");
 export const cartTotal = document.querySelector("#cart-total");
 export const cartCount = document.querySelector("#cartCount");
 export const cartItemCount = document.querySelector("#cartItemCount");
+export const openDrawer = document.querySelector("#open-drawer");
