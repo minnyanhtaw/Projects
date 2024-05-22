@@ -5,6 +5,7 @@ import {
   cartItemGroup,
   cartItemTemplate,
   cartTotal,
+  productGroup,
 } from "../core/selectors.js";
 
 export const createCartItem = (product, quantity) => {
@@ -63,6 +64,21 @@ export const removeCartItem = (event) => {
   }).then((result) => {
     if (result.isConfirmed) {
       currentCart.remove();
+
+      const currentProductId = currentCart.getAttribute("cart-product-id");
+
+      // console.log(currentProductId);
+      const currentProduct = productGroup.querySelector(
+        `[product-id='${currentProductId}']`
+      );
+
+      const currentProductBtn = currentProduct.querySelector(
+        ".product-add-cart-btn"
+      );
+
+      currentProductBtn.removeAttribute("disabled");
+      currentProductBtn.innerText = "Add To Cart";
+      // console.log(currentProduct);
       updateCartTotal();
       updateCartItemCount();
       const Toast = Swal.mixin({
